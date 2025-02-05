@@ -28,7 +28,7 @@ We have also downloaded chemical structures from ChEMBL, found in `data/other`.
 
 The pipeline to run the virtual screening consists of several steps as listed in the `scripts` folder. Data from resulting from running these scripts is generally stored in the `processed` subfolder.
 
-In this [Google Drive folder](https://drive.google.com/drive/folders/1I_0J3gYGC8oC_1xhg6rmYp576mEja5x1?usp=drive_link) you can find the `data.zip` and `processed.zip` folders with all precalculations done.
+In this [Google Drive folder](https://drive.google.com/drive/folders/1I_0J3gYGC8oC_1xhg6rmYp576mEja5x1?usp=drive_link) you can find the `data` and `processed` folders with all precalculations done.
 
 ### Training and preparation
 
