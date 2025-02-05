@@ -28,6 +28,8 @@ We have also downloaded chemical structures from ChEMBL, found in `data/other`.
 
 The pipeline to run the virtual screening consists of several steps as listed in the `scripts` folder. Data from resulting from running these scripts is generally stored in the `processed` subfolder.
 
+In this [Google Drive folder](https://drive.google.com/drive/folders/1I_0J3gYGC8oC_1xhg6rmYp576mEja5x1?usp=drive_link) you can find the `data.zip` and `processed.zip` folders with all precalculations done.
+
 ### Training and preparation
 
 Steps `00`to `03` are focused on training baseline models for each of the ~30 datasets related to _A.baumannii_. We build Naive Bayes models as well as Random Forest models using FLAML (autoML). In addition, we prepare FPSim2 databases that will be useful for downstream filtering. 
@@ -42,7 +44,7 @@ In step `07`, we make predictions using the Naive Bayes models on the 9M library
 
 ### Predictions and filtering across all models
 
-The 100M compounds (i.e. subset of the 1.7B leadlike library) are then screened against all FLAML models (step `10`) and subsequently filtered down to ~2000 molecules (step `11`). In addition, note that, to favour novelty, a similarity filter is applied (step `12`) to remove molecules with represented scaffolds in training set, as well as similarity matches against ChEMBL.
+The 100M compounds (i.e. subset of the 1.7B leadlike library) are then screened against all FLAML models (step `10`) and subsequently filtered down to ~2000 molecules (step `11`). In addition, note that, to favour novelty, a similarity filter is applied (step `12`) to remove molecules with represented scaffolds in training set, as well as similarity matches against the ChEMBL chemical space.
 
 ### Using the Ersilia Model Hub
 
