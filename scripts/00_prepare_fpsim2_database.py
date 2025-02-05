@@ -10,22 +10,33 @@ from rdkit.Chem.Scaffolds import MurckoScaffold
 
 root = os.path.dirname(os.path.abspath(__file__))
 
+with open(os.path.join(root, "..", "data", "other", "chembl_35_chemreps.txt"), "r") as f:
+    reader = csv.reader(f, delimiter="\t")
+    next(reader)
+    smiles_list = []
+    for r in reader:
+        smiles_list += [r[1]]
+print(smiles_list[:10])
 
-local_file = os.path.join(root, "..", "data", "other", "chembl_35_v0.6.0.h5")
+smiles_list = sorted(set(smiles_list))
 
-if not os.path.exists(local_file):
-    print("Downloading ChEMBL database file")
-    ftp_server = "ftp.ebi.ac.uk"
-    ftp_path = "/pub/databases/chembl/ChEMBLdb/releases/chembl_35/chembl_35_v0.6.0.h5"
-    ftp = FTP(ftp_server)
-    ftp.login()
-    with open(local_file, "wb") as file:
-        ftp.retrbinary(f"RETR {ftp_path}", file.write)
+mols = [[smiles, i] for i, smiles in enumerate(smiles_list)]
 
-    ftp.quit()
-    print(f"Downloaded {local_file} successfully!")
-else:
-    print(f"{local_file} already exists!")
+print("Creating a database file with Morgan fingerprints")
+
+create_db_file(
+    mols_source=mols,
+    filename=os.path.join(root, "..", "data", "other", "fpsim2_database_chembl.h5"),
+    mol_format='smiles',
+    fp_type='Morgan',
+    fp_params={'radius': 2, 'fpSize': 1024}
+)
+
+with open(os.path.join(root, "..", "data", "other", "fpsim2_database_chembl_smiles.csv"), "w") as f:
+    writer = csv.writer(f)
+    writer.writerow(["smiles", "index"])
+    for smiles, i in mols:
+        writer.writerow([smiles, i])
 
 smiles_list = []
 for subdir in os.listdir(os.path.join(root, "..", "data", "training")):

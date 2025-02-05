@@ -21,16 +21,16 @@ from tools import ghostml
 N_FOLDS = 5
 SPLITTING_ROUNDS = 3
 
-FLAML_ESTIMATOR_LIST = ["rf", "xgboost"]
+FLAML_ESTIMATOR_LIST = ["rf"]
 
-FLAML_COLD_MINIMUM_TIME_BUDGET_SECONDS = 60
-FLAML_COLD_MAXIMUM_TIME_BUDGET_SECONDS = 120
-FLAML_WARM_MINIMUM_TIME_BUDGET_SECONDS = 10
-FLAML_WARM_MAXIMUM_TIME_BUDGET_SECONDS = 60
+FLAML_COLD_MINIMUM_TIME_BUDGET_SECONDS = 250
+FLAML_COLD_MAXIMUM_TIME_BUDGET_SECONDS = 500
+FLAML_WARM_MINIMUM_TIME_BUDGET_SECONDS = 50
+FLAML_WARM_MAXIMUM_TIME_BUDGET_SECONDS = 250
 
 FLAML_COLD_MINIMUM_ITERATIONS = 50
 FLAML_COLD_MAXIMUM_ITERATIONS = 250
-FLAML_WARM_MINIMUM_ITERATIONS = 10
+FLAML_WARM_MINIMUM_ITERATIONS = 25
 FLAML_WARM_MAXIMUM_ITERATIONS = 100
 
 
@@ -257,7 +257,6 @@ class FlamlClassificationModel(object):
         _automl_settings["eval_method"] = "auto"
         _automl_settings["split_type"] = None
         _automl_settings["groups"] = None
-        _automl_settings["time_budget"] = 3 # TODO REMOVE
         model.fit(X_train=X, y_train=y, **_automl_settings)
         automl_settings = automl_settings
         model = self._fit_warm(X, y, model, automl_settings)
@@ -272,7 +271,6 @@ class FlamlClassificationModel(object):
                 FLAML_WARM_MAXIMUM_TIME_BUDGET_SECONDS,
             )
         )
-        automl_settings["time_budget"] = 3 # TODO REMOVE
         y = np.array(y)
         best_estimator = cold_model.best_estimator
         starting_point = self._get_starting_point(cold_model)
@@ -305,7 +303,6 @@ class FlamlClassificationModel(object):
                 FLAML_WARM_MAXIMUM_TIME_BUDGET_SECONDS,
             )
         )
-        automl_settings["time_budget"] = 3 # TODO REMOVE
         y = np.array(y)
         best_estimator = cold_model.best_estimator
         starting_point = self._get_starting_point(cold_model)
@@ -329,7 +326,6 @@ class FlamlClassificationModel(object):
                     FLAML_WARM_MAXIMUM_ITERATIONS,
                 )
             )
-            automl_settings["time_budget"] = 3 # TODO REMOVE
             model = AutoML()
             model.fit(
                 X_train=X_tr,
@@ -339,7 +335,12 @@ class FlamlClassificationModel(object):
             )
             model = model.model.estimator
             print("Fitting a calibrated model")
-            model = CalibratedClassifierCV(estimator=model, n_jobs=-1)
+            try:
+                model = CalibratedClassifierCV(estimator=model, n_jobs=-1)
+            except:
+                model = model.model.estimator
+                print("Could not calibrate model. Continuing...")
+                print("This is the model", model)
             model.fit(X_tr, y_tr)
             y_te_hat = model.predict_proba(X_te)[:, 1]
             for i, idx in enumerate(te_idxs):
@@ -361,8 +362,12 @@ class FlamlClassificationModel(object):
         threshold = GhostLight().get_threshold(
             results["y"], results["y_hat"]
         )
-        cal_model = CalibratedClassifierCV(model.model.estimator)
-        cal_model.fit(X, y)
+        try:
+            cal_model = CalibratedClassifierCV(model.model.estimator)
+            cal_model.fit(X, y)
+        except:
+            print("Could not calibrate model. Continuing...")
+            cal_model = model.model.estimator
         auroc = roc_auc_score(results["y"], results["y_hat"])
         self.results = {"auroc": float(auroc), "num_pos": int(sum(y)), "num_tot": int(len(y)), "opt_cut": threshold}
         print(self.results)

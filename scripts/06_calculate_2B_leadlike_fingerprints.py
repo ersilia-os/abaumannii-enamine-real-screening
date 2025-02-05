@@ -104,15 +104,23 @@ class Featurizer:
         h5_name = h5_path.split(".h5")[0]
         h5_path = h5_name + "_00.h5"
         for chunk in tqdm(chunker, desc="Processing Chunks"):
-            identifiers = chunk["id"].astype(str).tolist()
-            smiles_list = chunk["smiles"].astype(str).tolist()
-            X = self.calculate(smiles_list)
-            if create:
-                self._initialize_h5_datasets(h5_path, N_BITS, string_dtype)
-                create = False
-            self._append_to_h5(h5_path, "X", X)
-            self._append_to_h5(h5_path, "identifier", identifiers)
-            self._append_to_h5(h5_path, "smiles", smiles_list)
+            number = int(h5_path.split(".h5")[0].split("_")[-1])
+            print("Working on number", number)
+            if number > -1: # for debugging purposes, modify this number to skip chunks
+                do_calculation = True
+            else:
+                do_calculation = False
+                print("Skipping calculation, chunk number", number)
+            if do_calculation:
+                identifiers = chunk["id"].astype(str).tolist()
+                smiles_list = chunk["smiles"].astype(str).tolist()
+                X = self.calculate(smiles_list)
+                if create:
+                    self._initialize_h5_datasets(h5_path, N_BITS, string_dtype)
+                    create = False
+                self._append_to_h5(h5_path, "X", X)
+                self._append_to_h5(h5_path, "identifier", identifiers)
+                self._append_to_h5(h5_path, "smiles", smiles_list)
             with h5py.File(h5_path, "r") as h5_file:
                 shape = h5_file["X"].shape
             if max_rows_ceil and shape[0] >= max_rows_ceil:

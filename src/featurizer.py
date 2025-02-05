@@ -8,8 +8,6 @@ import os
 
 from .default import BATCH_SIZE, N_BITS, RADIUS
 
-DTYPE = np.uint8
-
 
 class Featurizer(object):
 

@@ -10,12 +10,9 @@ root = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.join(root, ".."))
 from src.featurizer import Featurizer
 
-N_BITS = 2048
-RADIUS = 3
-BATCH_SIZE = 800000
-DTYPE = np.uint8
-
 clf = joblib.load(os.path.join(root, "..", "processed", "08_model.pkl"))
+
+N_BITS = 2048
 
 fp_file_prefix = "06"
 
@@ -25,11 +22,12 @@ for fn in os.listdir(os.path.join(root, "..", "processed")):
         h5_path = os.path.join(root, "..", "processed", fn)
         h5_paths.append(h5_path)
 
-h5_paths = sorted(h5_paths)[:-1] # TODO remove the -1, now I use it as a test
+h5_paths = sorted(h5_paths)
+print(h5_paths)
 
 featurizer = Featurizer()
 
-cutoff = 0.5
+cutoff = 0.8
 
 h5_output = os.path.join(root, "..", "processed", "09_fingerprints.h5")
 if os.path.exists(h5_output):

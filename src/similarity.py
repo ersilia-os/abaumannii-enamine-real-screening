@@ -25,7 +25,6 @@ class TrainingSetScaffoldSimilarity(object):
                 continue
             inchikey = Chem.inchi.MolToInchiKey(scaffold)
             if inchikey in self.reference_inchikeys:
-                print(inchikey)
                 keep += [False]
             else:
                 keep += [True]
@@ -54,7 +53,7 @@ class ChemblHighestSimilarity(object):
 
     def __init__(self, similarity_threshold=0.7):
         self.similarity_threshold = similarity_threshold
-        self.fp_database = os.path.join(root, "..", "data", "other", "chembl_35_v0.6.0.h5")
+        self.fp_database = os.path.join(root, "..", "data", "other", "fpsim2_database_chembl.h5")
         self.fpe = FPSim2Engine(self.fp_database, in_memory_fps=False)
 
     def filter_by_highest_similarity(self, smiles_list):
