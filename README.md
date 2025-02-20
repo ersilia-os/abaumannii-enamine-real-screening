@@ -88,6 +88,29 @@ CC1CN(C(=O)[C@@H]2C[C@H](F)CCN2C(=O)C2[C@H](C)[C@H]2C)C(C)C1C |&1:6,8,&2:16,18|
 CO[C@@H]1C[C@H](C(=O)NCC2[C@H](C)[C@H]2C)N(C(=O)C2[C@H](C)[C@H]2C)C1 |&1:10,12,&2:18,20|
 ```
 
+**Note**: Enamine was not able to synthetise one of the compounds (plus some compounds were cheaper than expected). Therefore, we have updated our selection:
+
+```text
+s_27____9164738____26671526
+s_27____25546400____26671526
+s_27____12122390____26671526
+s_27____7763618____26671526
+s_27____15142214____26671532
+s_27____25522992____26671532
+s_27____25523342____26671532
+m_274552____23521164____24988990____25051654
+m_274552____14985752____24978212____25051654
+s_240690____13596036____21408790
+m_274552____23521314____24988990____25051654
+m_274552____23522020____13735420____25051654
+```
+
+## Get precalculated data
+
+This repository has hundreds of GB of calculated data. Data can be accessed from this [Google Drive link](https://drive.google.com/drive/folders/1I_0J3gYGC8oC_1xhg6rmYp576mEja5x1). If you are interestd in this data, please [reach out to us](miquel@ersilia.io) so we can guide you through.
+
+For a summary of the hits, please see the [results/Predictions_Abaumannii.xlsx]() file
+
 ## About the Ersilia Open Source Initiative
 
 [Ersilia](https://ersilia.io) is a tech non-profit organization aimed at fueling research in the Global South. We provide open-source AI/ML support to drug discovery laboratories in Africa and beyond. Visit our [GitBook documentation](https://ersilia.gitbook.io) and our [GitHub profile](https://github.com/ersilia-os) for more information.  
