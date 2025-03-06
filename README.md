@@ -115,10 +115,16 @@ s_27____12122390____26671526
 s_27____25546400____26671526
 ```
 
-This is problematic because these compounds were amongst the top hits from our previous list. In any case, we have updated the list:
+This is problematic because these compounds were amongst the top hits from our previous list. In any case, we have suggested the following extra molecules to the vendor, asking them to synthesize the first 5 that work:
 
 ```text
-
+s_27____23859668____26671532
+s_27____13424594____26671532
+s_27____17607294____26671532
+s_240690____13766376____21408790
+s_272430____11499776____26400940
+s_527____10966062____16809434
+m_274552____23522436____15962128____15977724
 ```
 
 ## Get precalculated data
